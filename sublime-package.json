@@ -1,0 +1,213 @@
+{
+  "contributions": {
+    "settings": [
+      {
+        "file_patterns": [
+          "/LSP-oxlint.sublime-settings"
+        ],
+        "schema": {
+          "$id": "sublime://settings/LSP-oxlint",
+          "definitions": {
+            "PluginConfig": {
+              "properties": {
+                "settings": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "oxc.lint.run": {
+                      "type": "string",
+                      "enum": [
+                        "onSave",
+                        "onType"
+                      ],
+                      "default": "onType",
+                      "markdownDescription": "Run the linter on save (onSave) or on type (onType)"
+                    },
+                    "oxc.configPath": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "default": null,
+                      "markdownDescription": "Path to oxlint configuration. Keep it empty to enable nested configuration."
+                    },
+                    "oxc.tsConfigPath": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "default": null,
+                      "markdownDescription": "Path to the project's TypeScript config file. \n\nIf your `tsconfig.json` is not at the root, you will need this set for the `import` plugin rules to resolve imports correctly."
+                    },
+                    "oxc.unusedDisableDirectives": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "allow",
+                        "warn",
+                        "deny",
+                        null
+                      ],
+                      "markdownEnumDescriptions": [
+                        "Allow all `oxlint-disable` and `eslint-disable` directives, even if they do nothing.",
+                        "Warn about `oxlint-disable` and `eslint-disable` directives that do nothing.",
+                        "Error on `oxlint-disable` and `eslint-disable` directives that do nothing."
+                      ],
+                      "default": null,
+                      "markdownDescription": "Define how directive comments like `// oxlint-disable-line` should be reported, when no errors would have been reported on that line anyway. It is preferred to use `options.reportUnusedDisableDirectives` in your configuration file"
+                    },
+                    "oxc.typeAware": {
+                      "type": [
+                        "boolean",
+                        "null"
+                      ],
+                      "default": null,
+                      "markdownDescription": "Forces type-aware linting. Requires the `oxlint-tsgolint` package. It is preferred to use `options.typeAware` in your configuration file"
+                    },
+                    "oxc.disableNestedConfig": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Disable searching for nested configuration files. When set to true, only the configuration file specified in `oxc.configPath` (if any) will be used."
+                    },
+                    "oxc.fixKind": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "enum": [
+                        "safe_fix",
+                        "safe_fix_or_suggestion",
+                        "dangerous_fix",
+                        "dangerous_fix_or_suggestion",
+                        "none",
+                        "all",
+                        null
+                      ],
+                      "markdownEnumDescriptions": [
+                        "Only safe fixes will be applied",
+                        "Safe fixes or suggestions will be applied",
+                        "Safe and dangerous fixes will be applied",
+                        "Safe and dangerous fixes or suggestions will be applied",
+                        "No fixes will be applied",
+                        "All fixes and suggestions will be applied"
+                      ],
+                      "default": null,
+                      "markdownDescription": "Specify the kind of fixes to suggest/apply."
+                    },
+                    "oxc.lint.customization": {
+                      "type": [
+                        "object",
+                        "null"
+                      ],
+                      "default": null,
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "autofix": {
+                            "type": "boolean",
+                            "markdownDescription": "Whether autofix should be disabled for this rule."
+                          },
+                          "severity": {
+                            "type": "string",
+                            "enum": [
+                              "error",
+                              "warn",
+                              "info",
+                              "hint",
+                              "off"
+                            ],
+                            "markdownDescription": "Diagnostic severity override for this rule."
+                          }
+                        }
+                      },
+                      "markdownDescription": "Customizes linting rules behavior. See <https://oxc.rs/docs/guide/usage/linter/lsp-config-reference.html#rulescustomization> for details."
+                    }
+                  }
+                },
+                "initialization_options": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "oxc.requireConfig": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Start the language server only when a `.oxlintrc.json(c)` or `oxlint.config.(m)ts` file exists in the root of one of the workspace folders."
+                    },
+                    "oxc.path.tsgolint": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "default": null,
+                      "markdownDescription": "Path to an Oxc tsgolint binary. Default: auto detection from `oxlint`."
+                    },
+                    "oxc.suppressProgramErrors": {
+                      "type": "boolean",
+                      "default": false,
+                      "markdownDescription": "Suppress tsconfig errors from tsgolint and still lint files under partially-valid tsconfig projects. When enabled, sets `OXLINT_TSGOLINT_DANGEROUSLY_SUPPRESS_PROGRAM_DIAGNOSTICS=true`. **Note:** Type-aware lint rules may produce degraded results when the tsconfig is broken."
+                    }
+                  }
+                },
+                "server_path": {
+                  "type": "string",
+                  "default": "auto",
+                  "markdownDescription": "The path to the `oxlint` binary used to start the language server. Use `auto` to use the project's `node_modules/oxlint` if present and otherwise the version managed by this package. A relative path is resolved against the workspace folder."
+                }
+              }
+            }
+          },
+          "type": "object",
+          "allOf": [
+            {
+              "$ref": "sublime://settings/LSP-plugin-base"
+            },
+            {
+              "$ref": "sublime://settings/LSP-oxlint#/definitions/PluginConfig"
+            }
+          ]
+        }
+      },
+      {
+        "file_patterns": [
+          "/*.sublime-project"
+        ],
+        "schema": {
+          "properties": {
+            "settings": {
+              "properties": {
+                "LSP": {
+                  "properties": {
+                    "LSP-oxlint": {
+                      "$ref": "sublime://settings/LSP-oxlint#/definitions/PluginConfig"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "file_patterns": [
+          "LSP.sublime-settings"
+        ],
+        "schema": {
+          "properties": {
+            "lsp_code_actions_on_save": {
+              "properties": {
+                "source.fixAll.oxc": {
+                  "type": "boolean"
+                },
+                "source.fixAllDangerous.oxc": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    ]
+  }
+}
