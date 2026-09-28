@@ -3,7 +3,6 @@ from __future__ import annotations
 from LSP.plugin import ClientNotification
 from LSP.plugin import ClientRequest
 from LSP.plugin import ClientResponse
-from LSP.plugin import DottedDict
 from LSP.plugin import LspPlugin
 from LSP.plugin import OnPreStartContext
 from LSP.plugin import PluginStartError
@@ -20,21 +19,6 @@ OXLINT_LOCATION = Path('node_modules', 'oxlint', 'bin', 'oxlint')
 OXLINT_CONFIG_FILES = ('.oxlintrc.json', '.oxlintrc.jsonc', 'oxlint.config.ts', 'oxlint.config.mts')
 # The section the server requests with `workspace/configuration`.
 SERVER_SECTION = 'oxc_language_server'
-# Maps server option names to package setting keys (same as the VSCode extension).
-SERVER_OPTIONS = {
-    'configPath': 'oxc.configPath',
-    'tsConfigPath': 'oxc.tsConfigPath',
-    'unusedDisableDirectives': 'oxc.unusedDisableDirectives',
-    'typeAware': 'oxc.typeAware',
-    'disableNestedConfig': 'oxc.disableNestedConfig',
-    'fixKind': 'oxc.fixKind',
-    'rulesCustomization': 'oxc.lint.customization',
-    'run': 'oxc.lint.run',
-}
-
-
-def to_server_options(settings: DottedDict) -> dict[str, Any]:
-    return remove_null_values({option: settings.get(key) for option, key in SERVER_OPTIONS.items()})
 
 
 def remove_null_values(value: Any) -> Any:
@@ -93,25 +77,35 @@ class LspOxlintPlugin(LspPlugin):
                 return binary_path
         return None
 
+    def _server_options(self) -> dict[str, Any] | None:
+        if not (session := self.weaksession()):
+            return None
+        options = remove_null_values(session.config.settings.get())
+        return sublime.expand_variables(options, session.window.extract_variables())
+
+    def _workspace_server_options(self) -> list[dict[str, Any]] | None:
+        """Options for every workspace folder, in the shape that the language server expects."""
+        if not (session := self.weaksession()) or (options := self._server_options()) is None:
+            return None
+        return [
+            {'workspaceUri': folder.uri(), 'options': options} for folder in session.get_workspace_folders()
+        ]
+
     @override
     def on_pre_send_request_async(self, request: ClientRequest, view: sublime.View | None) -> None:
-        if request['method'] == 'initialize' and (init_options := request['params'].get('initializationOptions')):
-            request['params']['initializationOptions'] = remove_null_values(init_options)
+        if request['method'] == 'initialize':
+            # The package `initialization_options` are used only by the plugin and are not sent to the server.
+            request['params']['initializationOptions'] = self._workspace_server_options()
 
     @override
     def on_pre_send_notification_async(self, notification: ClientNotification) -> None:
         if notification['method'] == 'workspace/didChangeConfiguration':
-            # The server treats a non-list `settings` value as the options for all workspace folders.
-            settings = notification['params'].get('settings')
-            notification['params']['settings'] = to_server_options(DottedDict(settings)) if isinstance(settings, dict) \
-                else None
+            notification['params']['settings'] = self._workspace_server_options()
 
     @override
     def on_pre_send_response_async(self, response: ClientResponse) -> None:
-        if response['method'] != 'workspace/configuration' or not (session := self.weaksession()):
+        if response['method'] != 'workspace/configuration' or (options := self._server_options()) is None:
             return
-        options = sublime.expand_variables(
-            to_server_options(session.config.settings), session.window.extract_variables())
         # Modify the list in place as it is the one that is sent to the server.
         for index, item in enumerate(response['params']['items']):
             if item.get('section') == SERVER_SECTION:

@@ -29,6 +29,14 @@
         },
         {
             "type": "jq",
+            "options": "with_entries(.key |= ({\"oxc.lint.run\": \"run\", \"oxc.lint.customization\": \"rulesCustomization\"}[.] // ltrimstr(\"oxc.\")))"
+        },
+        {
+            "type": "jq",
+            "options": "walk(if type == \"string\" then gsub(\"`oxc\\\\.configPath`\"; \"`configPath`\") else . end)"
+        },
+        {
+            "type": "jq",
             "options": "walk(if type == \"object\" then del(.scope, .order, .keywords) else . end)"
         },
         {

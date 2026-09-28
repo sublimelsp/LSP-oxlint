@@ -1,23 +1,23 @@
 {
 	"settings": {
 		// Run the linter on save (onSave) or on type (onType)
-		"oxc.lint.run": "onType",
+		"run": "onType",
 		// Path to oxlint configuration. Keep it empty to enable nested configuration.
-		"oxc.configPath": null,
+		"configPath": null,
 		// Path to the project's TypeScript config file.
 		//
 		// If your `tsconfig.json` is not at the root, you will need this set for the `import` plugin rules to resolve imports correctly.
-		"oxc.tsConfigPath": null,
+		"tsConfigPath": null,
 		// Define how directive comments like `// oxlint-disable-line` should be reported, when no errors would have been reported on that line anyway. It is preferred to use `options.reportUnusedDisableDirectives` in your configuration file
-		"oxc.unusedDisableDirectives": null,
+		"unusedDisableDirectives": null,
 		// Forces type-aware linting. Requires the `oxlint-tsgolint` package. It is preferred to use `options.typeAware` in your configuration file
-		"oxc.typeAware": null,
-		// Disable searching for nested configuration files. When set to true, only the configuration file specified in `oxc.configPath` (if any) will be used.
-		"oxc.disableNestedConfig": false,
+		"typeAware": null,
+		// Disable searching for nested configuration files. When set to true, only the configuration file specified in `configPath` (if any) will be used.
+		"disableNestedConfig": false,
 		// Specify the kind of fixes to suggest/apply.
-		"oxc.fixKind": null,
+		"fixKind": null,
 		// Customizes linting rules behavior. See <https://oxc.rs/docs/guide/usage/linter/lsp-config-reference.html#rulescustomization> for details.
-		"oxc.lint.customization": null,
+		"rulesCustomization": null,
 	},
 	// Options that apply when the server starts. Changing these restarts the server.
 	"initialization_options": {

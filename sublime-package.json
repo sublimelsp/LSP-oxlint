@@ -14,7 +14,7 @@
                   "type": "object",
                   "additionalProperties": false,
                   "properties": {
-                    "oxc.lint.run": {
+                    "run": {
                       "type": "string",
                       "enum": [
                         "onSave",
@@ -23,7 +23,7 @@
                       "default": "onType",
                       "markdownDescription": "Run the linter on save (onSave) or on type (onType)"
                     },
-                    "oxc.configPath": {
+                    "configPath": {
                       "type": [
                         "string",
                         "null"
@@ -31,7 +31,7 @@
                       "default": null,
                       "markdownDescription": "Path to oxlint configuration. Keep it empty to enable nested configuration."
                     },
-                    "oxc.tsConfigPath": {
+                    "tsConfigPath": {
                       "type": [
                         "string",
                         "null"
@@ -39,7 +39,7 @@
                       "default": null,
                       "markdownDescription": "Path to the project's TypeScript config file. \n\nIf your `tsconfig.json` is not at the root, you will need this set for the `import` plugin rules to resolve imports correctly."
                     },
-                    "oxc.unusedDisableDirectives": {
+                    "unusedDisableDirectives": {
                       "type": [
                         "string",
                         "null"
@@ -58,7 +58,7 @@
                       "default": null,
                       "markdownDescription": "Define how directive comments like `// oxlint-disable-line` should be reported, when no errors would have been reported on that line anyway. It is preferred to use `options.reportUnusedDisableDirectives` in your configuration file"
                     },
-                    "oxc.typeAware": {
+                    "typeAware": {
                       "type": [
                         "boolean",
                         "null"
@@ -66,12 +66,12 @@
                       "default": null,
                       "markdownDescription": "Forces type-aware linting. Requires the `oxlint-tsgolint` package. It is preferred to use `options.typeAware` in your configuration file"
                     },
-                    "oxc.disableNestedConfig": {
+                    "disableNestedConfig": {
                       "type": "boolean",
                       "default": false,
-                      "markdownDescription": "Disable searching for nested configuration files. When set to true, only the configuration file specified in `oxc.configPath` (if any) will be used."
+                      "markdownDescription": "Disable searching for nested configuration files. When set to true, only the configuration file specified in `configPath` (if any) will be used."
                     },
-                    "oxc.fixKind": {
+                    "fixKind": {
                       "type": [
                         "string",
                         "null"
@@ -96,7 +96,7 @@
                       "default": null,
                       "markdownDescription": "Specify the kind of fixes to suggest/apply."
                     },
-                    "oxc.lint.customization": {
+                    "rulesCustomization": {
                       "type": [
                         "object",
                         "null"
