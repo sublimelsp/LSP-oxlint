@@ -1,0 +1,29 @@
+{
+	"settings": {
+		{{ settings | indent('\t\t') }}
+	},
+	// Options that apply when the server starts. Changing these restarts the server.
+	"initialization_options": {
+		// Start the language server only when a `.oxlintrc.json(c)` or `oxlint.config.(m)ts` file exists in the root
+		// of one of the workspace folders.
+		"oxc.requireConfig": false,
+		// Path to an Oxc tsgolint binary. Default: auto detection from `oxlint`.
+		"oxc.path.tsgolint": null,
+		// Suppress tsconfig errors from tsgolint and still lint files under partially-valid tsconfig projects.
+		// Type-aware lint rules may produce degraded results when the tsconfig is broken.
+		"oxc.suppressProgramErrors": false,
+	},
+	"selector": "source.js | source.ts | source.jsx | source.tsx | source.js.jsx | source.js.react | source.ts.react | source.astro | text.html.astro | text.html.svelte | text.html.vue",
+	// The path to the oxlint binary used to start the language server.
+	// Use `auto` to use the project's `node_modules/oxlint` if present and otherwise the version managed by
+	// this package.
+	// If the path is relative, the workspace folder will be used as base path.
+	// NOTE: Change this instead of directly updating `command` - the `${server_path}` variable is dynamically resolved
+	// based on this setting.
+	"server_path": "auto",
+	"command": [
+		"${node_bin}",
+		"${server_path}",
+		"--lsp"
+	]
+}

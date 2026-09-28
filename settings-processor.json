@@ -1,0 +1,59 @@
+{
+    "input_repository_url": "https://github.com/oxc-project/oxc-vscode",
+    "input_repository_json_configuration_path": "package.json",
+    "transformers": [
+        {
+            "type": "jq",
+            "options": ".contributes.configuration.properties"
+        },
+        {
+            "type": "remove_keys",
+            "options": [
+                "oxc.enable",
+                "oxc.enable.oxfmt",
+                "oxc.enable.oxlint",
+                "oxc.flags",
+                "oxc.fmt.configPath",
+                "oxc.fmt.disableNestedConfig",
+                "oxc.fmt.experimental",
+                "oxc.path.node",
+                "oxc.path.oxfmt",
+                "oxc.path.oxlint",
+                "oxc.path.server",
+                "oxc.path.tsgolint",
+                "oxc.requireConfig",
+                "oxc.suppressProgramErrors",
+                "oxc.trace.server",
+                "oxc.useExecPath"
+            ]
+        },
+        {
+            "type": "jq",
+            "options": "with_entries(.key |= ({\"oxc.lint.run\": \"run\", \"oxc.lint.customization\": \"rulesCustomization\"}[.] // ltrimstr(\"oxc.\")))"
+        },
+        {
+            "type": "jq",
+            "options": "walk(if type == \"string\" then gsub(\"`oxc\\\\.configPath`\"; \"`configPath`\") else . end)"
+        },
+        {
+            "type": "jq",
+            "options": "walk(if type == \"object\" then del(.scope, .order, .keywords) else . end)"
+        },
+        {
+            "type": "jq",
+            "options": "map_values(if has(\"enum\") and (.type | type) == \"array\" and (.type | index(\"null\")) and (.enum | index(null) | not) then .enum += [null] else . end)"
+        }
+    ],
+    "render_templates": [
+        {
+            "type": "settings",
+            "template_path": "templates/sublime-settings.jinja.json",
+            "output_path": "LSP-oxlint.sublime-settings"
+        },
+        {
+            "type": "schema",
+            "template_path": "templates/sublime-package.jinja.json",
+            "output_path": "sublime-package.json"
+        }
+    ]
+}
