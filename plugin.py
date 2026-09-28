@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from LSP.plugin import ClientNotification
+from LSP.plugin import ClientRequest
 from LSP.plugin import ClientResponse
 from LSP.plugin import DottedDict
 from LSP.plugin import LspPlugin
@@ -33,7 +34,13 @@ SERVER_OPTIONS = {
 
 
 def to_server_options(settings: DottedDict) -> dict[str, Any]:
-    return {option: value for option, key in SERVER_OPTIONS.items() if (value := settings.get(key)) is not None}
+    return remove_null_values({option: settings.get(key) for option, key in SERVER_OPTIONS.items()})
+
+
+def remove_null_values(value: Any) -> Any:
+    if isinstance(value, dict):
+        return {key: remove_null_values(item) for key, item in value.items() if item is not None}
+    return value
 
 
 class LspOxlintPlugin(LspPlugin):
@@ -85,6 +92,11 @@ class LspOxlintPlugin(LspPlugin):
             if (binary_path := Path(folder.path, OXLINT_LOCATION)).is_file():
                 return binary_path
         return None
+
+    @override
+    def on_pre_send_request_async(self, request: ClientRequest, view: sublime.View | None) -> None:
+        if request['method'] == 'initialize' and (init_options := request['params'].get('initializationOptions')):
+            request['params']['initializationOptions'] = remove_null_values(init_options)
 
     @override
     def on_pre_send_notification_async(self, notification: ClientNotification) -> None:
