@@ -2,11 +2,11 @@
 	"settings": {
 		// Run the linter on save (onSave) or on type (onType)
 		"run": "onType",
-		// Optional path to an Oxlint configuration file. When unset (`null`), Oxlint automatically discovers configuration files. Set this to use a specific file; doing so disables nested configuration. Supports [variables](#variables).
+		// Optional path to an Oxlint configuration file. When unset (`null`), Oxlint automatically discovers configuration files. Set this to use a specific file; doing so disables nested configuration.
 		"configPath": null,
 		// Path to the project's TypeScript config file.
 		//
-		// If your `tsconfig.json` is not at the root, you will need this set for the `import` plugin rules to resolve imports correctly. Supports [variables](#variables).
+		// If your `tsconfig.json` is not at the root, you will need this set for the `import` plugin rules to resolve imports correctly.
 		"tsConfigPath": null,
 		// Define how directive comments like `// oxlint-disable-line` should be reported, when no errors would have been reported on that line anyway. It is preferred to use `options.reportUnusedDisableDirectives` in your configuration file
 		"unusedDisableDirectives": null,

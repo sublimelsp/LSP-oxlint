@@ -29,7 +29,7 @@
                         "null"
                       ],
                       "default": null,
-                      "markdownDescription": "Optional path to an Oxlint configuration file. When unset (`null`), Oxlint automatically discovers configuration files. Set this to use a specific file; doing so disables nested configuration. Supports [variables](#variables)."
+                      "markdownDescription": "Optional path to an Oxlint configuration file. When unset (`null`), Oxlint automatically discovers configuration files. Set this to use a specific file; doing so disables nested configuration."
                     },
                     "tsConfigPath": {
                       "type": [
@@ -37,7 +37,7 @@
                         "null"
                       ],
                       "default": null,
-                      "markdownDescription": "Path to the project's TypeScript config file. \n\nIf your `tsconfig.json` is not at the root, you will need this set for the `import` plugin rules to resolve imports correctly. Supports [variables](#variables)."
+                      "markdownDescription": "Path to the project's TypeScript config file. \n\nIf your `tsconfig.json` is not at the root, you will need this set for the `import` plugin rules to resolve imports correctly."
                     },
                     "unusedDisableDirectives": {
                       "type": [
