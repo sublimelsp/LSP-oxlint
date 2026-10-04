@@ -33,7 +33,7 @@
         },
         {
             "type": "jq",
-            "options": "walk(if type == \"string\" then gsub(\"`oxc\\\\.configPath`\"; \"`configPath`\") else . end)"
+            "options": "walk(if type == \"string\" then gsub(\"`oxc\\\\.configPath`\"; \"`configPath`\") | gsub(\" ?Supports \\\\[variables\\\\]\\\\(#variables\\\\)\\\\.\"; \"\") else . end)"
         },
         {
             "type": "jq",
