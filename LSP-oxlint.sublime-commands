@@ -1,0 +1,17 @@
+[
+    {
+        "caption": "Preferences: LSP-oxlint Settings",
+        "command": "edit_settings",
+        "args": {
+            "base_file": "${packages}/LSP-oxlint/LSP-oxlint.sublime-settings",
+            "default": "// Settings in here override those in \"LSP-oxlint/LSP-oxlint.sublime-settings\"\n\n{\n\t$0\n}\n"
+        }
+    },
+    {
+        "caption": "LSP-oxlint: Fix All",
+        "command": "lsp_code_actions",
+        "args": {
+            "only_kinds": ["source.fixAll.oxc"],
+        }
+    },
+]
