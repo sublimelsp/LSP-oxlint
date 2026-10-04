@@ -6,7 +6,6 @@ from LSP.plugin import ClientResponse
 from LSP.plugin import LspPlugin
 from LSP.plugin import OnPreStartContext
 from LSP.plugin import PluginStartError
-from LSP.plugin import ServerResponse
 from LSP.plugin import WorkspaceFolder
 from lsp_utils import NodeManager
 from pathlib import Path
@@ -112,10 +111,11 @@ class LspOxlintPlugin(LspPlugin):
                 response['result'][index] = options
 
     @override
-    def on_server_response_async(self, response: ServerResponse) -> None:
-        if response['method'] == 'initialize':
-            if (session := self.weaksession()) and (version := response['result'].get('serverInfo', {}).get('version')):
-                session.set_config_status_async(version)
+    def on_initialized_async(self) -> None:
+        if session := self.weaksession():
+            # `on_pre_start_async` resolves `server_path` to a path only when using a project-local server.
+            server_path = session.config.root_settings.get('server_path')
+            session.set_config_status_async('local' if server_path and server_path != 'auto' else 'bundled')
 
 
 def plugin_loaded() -> None:
