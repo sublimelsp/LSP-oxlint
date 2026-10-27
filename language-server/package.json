@@ -1,6 +1,6 @@
 {
   "private": true,
   "dependencies": {
-    "oxlint": "1.89.0"
+    "oxlint": "1.90.0"
   }
 }
